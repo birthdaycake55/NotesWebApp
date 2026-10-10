@@ -1,0 +1,30 @@
+{
+  "notes": [
+    {
+      "id": "1",
+      "content": "Browser can execute only JavaScript",
+      "important": true
+    },
+    {
+      "id": "2",
+      "content": "Browser can execute only JavaScript",
+      "important": true
+    },
+    {
+      "id": "3",
+      "content": "GET and POST are the most important methods of HTTP protocol",
+      "important": true
+    },
+    {
+      "content": "a new note test",
+      "important": true,
+      "id": "10ll91S8vYc"
+    },
+    {
+      "content": "hi",
+      "important": false,
+      "id": "HOIsQ_cwCw0"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
