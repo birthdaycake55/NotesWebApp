@@ -1,7 +1,7 @@
 import axios from 'axios'
 const baseUrl = '/api/notes' //changed cause of backend
 
-const token = null
+let token = null
 
 const setToken = (newToken) => {
     token = `Bearer ${newToken}`

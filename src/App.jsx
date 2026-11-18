@@ -6,6 +6,8 @@ import Notification from './components/Notification'
 import Footer from './components/Footer'
 import loginService from './services/login'
 
+//add logout func, move login stuff to components
+
 function App(){
   const [notes, setNotes] = useState([])
   const [newNote, setNewNote] = useState('a new note...')
