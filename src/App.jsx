@@ -6,7 +6,7 @@ import Notification from './components/Notification'
 import Footer from './components/Footer'
 import loginService from './services/login'
 
-//add logout func, move login stuff to components
+//add logout func, move login stuff to components, decide between async/await or .then
 
 function App(){
   const [notes, setNotes] = useState([])
