@@ -7,6 +7,7 @@ import Footer from './components/Footer'
 import loginService from './services/login'
 
 //add logout func, move login stuff to components, decide between async/await or .then
+//remove notes when not logged in
 
 function App(){
   const [notes, setNotes] = useState([])
