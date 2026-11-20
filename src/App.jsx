@@ -1,15 +1,17 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './App.css'
 import Note from './components/Note'
 import noteService from './services/notes'
 import Notification from './components/Notification'
 import Footer from './components/Footer'
 import loginService from './services/login'
-import Login from './components/Login'
+import LoginForm from './components/Login'
 import Button from './components/Button'
+import Togglable from './components/Toggable'
+import NoteForm from './components/NoteForm'
 
 //add logout func, move login stuff to components, decide between async/await or .then
-//remove notes when not logged in
+//remove notes when not logged in, change login form like noteform
 
 function App(){
   const [notes, setNotes] = useState([])
@@ -19,6 +21,7 @@ function App(){
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const noteFormRef = useRef()
 
   useEffect(() => {
     noteService
@@ -39,14 +42,8 @@ function App(){
   
 //useEffect(function, how often its ran) empty arr = only first render
 
-  function addNote(event){
-      event.preventDefault()//to prevent the default action when clicking submit
-      const noteObject = {
-        content: newNote,
-        important: Math.random() < 0.5,
-        //id: String(notes.length+1) better to let server do it
-      }
-
+  const addNote = (noteObject) => {
+    noteFormRef.current.toggleVisibility() //when new note is added, toggles visibility of form
       noteService
       .create(noteObject)
       .then(returnedNote=>{
@@ -104,36 +101,21 @@ function App(){
 
   //input placed in label for accessibility screen readers
   const loginForm = () => (
-    <form onSubmit={handleLogin}>
-      <div>
-        <label>
-          username
-          <input
-            type="text"
-            value={username}
-            onChange={({ target }) => setUsername(target.value)}
+    <Togglable buttonLabel='login'>
+          <LoginForm
+            handleSubmit={handleLogin}
+            handleUsernameChange={({ target }) => setUsername(target.value)}
+            handlePasswordChange={({ target }) => setPassword(target.value)}
+            username={username}
+            password={password}
           />
-        </label>
-      </div>
-      <div>
-        <label>
-          password
-          <input
-            type="password"
-            value={password}
-            onChange={({ target }) => setPassword(target.value)}
-          />
-        </label>
-      </div>
-      <button type="submit">login</button>
-    </form>
+    </Togglable>
   )
 
-  const noteForm = () => (
-    <form onSubmit={addNote}>
-      <input value={newNote} onChange={handleNoteChange} />
-      <button type="submit">save</button>
-    </form>
+  const noteForm = () => ( //ref allows visibility to be toggled
+    <Togglable buttonLabel='new note' ref={noteFormRef}> 
+      <NoteForm noteObject={addNote}/>
+    </Togglable>
   )
 
   const handleLogout = async event => {
@@ -158,13 +140,7 @@ function App(){
       <h1>Notes</h1>
       <Notification message={errorMessage}/>
       
-      {!user && <Login 
-      handleSubmit={handleLogin} 
-      handleUsernameChange={({ target }) => setUsername(target.value)}
-      handlePasswordChange={({ target }) => setPassword(target.value)}
-      username={username}
-      password={password}
-      />}
+      {!user && loginForm()}
       {user && (
         <div>
           <p>{user.name} logged in</p>
