@@ -5,6 +5,8 @@ import noteService from './services/notes'
 import Notification from './components/Notification'
 import Footer from './components/Footer'
 import loginService from './services/login'
+import Login from './components/Login'
+import Button from './components/Button'
 
 //add logout func, move login stuff to components, decide between async/await or .then
 //remove notes when not logged in
@@ -134,13 +136,35 @@ function App(){
     </form>
   )
 
+  const handleLogout = async event => {
+    event.preventDefault
+    try{
+      setUser(null)
+      noteService.setToken(null)
+      window.localStorage.removeItem('loggedNoteappUser')
+    } catch {
+      setSetting('error')
+      setMessage('Can not log out. Try again later.')
+      setTimeout(() => {
+        setSetting(null)
+        setMessage(null)
+      }, 5000)
+    }
+  }
+
 //key is needed
   return(
     <div>
       <h1>Notes</h1>
       <Notification message={errorMessage}/>
       
-      {!user && loginForm()}
+      {!user && <Login 
+      handleSubmit={handleLogin} 
+      handleUsernameChange={({ target }) => setUsername(target.value)}
+      handlePasswordChange={({ target }) => setPassword(target.value)}
+      username={username}
+      password={password}
+      />}
       {user && (
         <div>
           <p>{user.name} logged in</p>
@@ -156,6 +180,7 @@ function App(){
       <ul>
         {noteToShow.map(note=><Note key={note.id} note={note} toggleImportance={() => toggleImportanceOf(note.id)}/>)}
       </ul>
+      <Button func={handleLogout} text={'Logout'}/>
       <Footer/>
     </div>
   )
